@@ -1,23 +1,25 @@
 'use client'
 import Image from "next/image";
+import Link from "next/link";
 import data from "../datas/datas";
-import { useState, useEffect } from "react";
-import Router, { useSearchParams } from "next/navigation";
-
+import { useState, useReducer } from "react";
+import { useSearchParams, } from "next/navigation";
+// import { useDispatch, useSelector } from "react-redux";
+import { INITIAL, handleAddAnswers } from '../addAnswers';
 
 const Question = () => {
   const [currentNum, setCurrentNum] = useState(0);
   const [selectedValue, setSelectedValue] = useState(null);
   const [displayExplanation, setDisplayExplanation] = useState(false);
   const [judgment, setJudgment] = useState(false);
-  const [addAnswers, setAddAnswers] = useState([]);
+  const [state, dispatch] = useReducer(handleAddAnswers, INITIAL);
+
 
   const seeAnswer = useSearchParams().get('seeAnswer');
   const handleSelect = (e) => {
     setSelectedValue(e.target.value);
     setJudgment(true);
-    setAddAnswers([...addAnswers, e.target.value]);
-
+    dispatch({ type: 'ADD_ANSWER', payload: e.target.value });
   }
   const handleDisplayExplanation = () => {
     setDisplayExplanation(true);
@@ -31,7 +33,7 @@ const Question = () => {
     setSelectedValue(null);
     const radioButtons = document.querySelectorAll('input[name="drone"]');
     radioButtons.forEach(radioButton => radioButton.checked = false);
-    console.log(data.length);
+    console.log(state.addAnswers);
   }
   const handlePrevButton = () => {
     setCurrentNum(currentNum - 1);
@@ -72,10 +74,11 @@ const Question = () => {
       )}
       <div className="flex gap-8">
         <button type="button" onClick={handlePrevButton} className="p-2 font-bold rounded-full shadow-lg min-w-40">PREV</button>
-        {data.length - 1 === currentNum ?
-          <button type="button" className="p-2 font-bold rounded-full shadow-lg min-w-40">See result</button> :
+        {data.length - 1 === currentNum ? (
+          <Link href="../result" className="p-2 font-bold rounded-full shadow-lg min-w-40">see result</Link>
+        ) : (
           <button type="button" onClick={handleNextButton} className="p-2 font-bold rounded-full shadow-lg min-w-40">NEXT</button>
-        }
+        )}
       </div>
     </div >
   )

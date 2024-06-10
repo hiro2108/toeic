@@ -27,7 +27,7 @@ const Home = () => {
         </div>
       </fieldset>
       {showLink && 
-      <Link  href={`/question?seeAnswer=${seeAnswer}`} className="flex justify-center p-2 font-bold rounded-full shadow-lg hover:shadow-none min-w-40">START</Link>
+      <Link href={`/question?seeAnswer=${seeAnswer}`} className="flex justify-center p-2 font-bold rounded-full shadow-lg hover:shadow-none min-w-40">START</Link>
       }
     </div>
   );
