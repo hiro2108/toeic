@@ -2,24 +2,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import data from "../datas/datas";
-import { useState, useReducer } from "react";
-import { useSearchParams, } from "next/navigation";
-// import { useDispatch, useSelector } from "react-redux";
-import { INITIAL, handleAddAnswers } from '../addAnswers';
+import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const Question = () => {
+  const router = useRouter();
+
   const [currentNum, setCurrentNum] = useState(0);
   const [selectedValue, setSelectedValue] = useState(null);
   const [displayExplanation, setDisplayExplanation] = useState(false);
   const [judgment, setJudgment] = useState(false);
-  const [state, dispatch] = useReducer(handleAddAnswers, INITIAL);
+  const [addAnswers, setAddAnswers] = useState([]);
 
+  const params = useSearchParams();
+  const seeAnswer = params.get('seeAnswer');
 
-  const seeAnswer = useSearchParams().get('seeAnswer');
   const handleSelect = (e) => {
-    setSelectedValue(e.target.value);
     setJudgment(true);
-    dispatch({ type: 'ADD_ANSWER', payload: e.target.value });
+    setSelectedValue(e.target.value);
+    console.log(addAnswers);
   }
   const handleDisplayExplanation = () => {
     setDisplayExplanation(true);
@@ -27,18 +28,27 @@ const Question = () => {
 
   const handleNextButton = () => {
     if (selectedValue !== null) {
-      data[currentNum].initialValue = selectedValue;
+      setAddAnswers([...addAnswers, selectedValue]);
+    } else {
+      setAddAnswers([...addAnswers, 'null']);
     }
     setCurrentNum(currentNum + 1);
     setSelectedValue(null);
     const radioButtons = document.querySelectorAll('input[name="drone"]');
     radioButtons.forEach(radioButton => radioButton.checked = false);
-    console.log(state.addAnswers);
   }
   const handlePrevButton = () => {
     setCurrentNum(currentNum - 1);
     const radioButtons = document.querySelectorAll('input[name="drone"]');
     radioButtons.forEach(radioButton => radioButton.checked = false);
+  }
+
+  const gotoResultPage = () => {
+    setAddAnswers([...addAnswers, selectedValue]);
+    const answerParams = addAnswers.map((str, index) => (
+      `Q${index + 1}=${str}${index === addAnswers.length - 1 ? '' : '&'}`
+    )).join('');
+    router.push(`/result?${answerParams}`);
   }
 
   return (
@@ -75,7 +85,7 @@ const Question = () => {
       <div className="flex gap-8">
         <button type="button" onClick={handlePrevButton} className="p-2 font-bold rounded-full shadow-lg min-w-40">PREV</button>
         {data.length - 1 === currentNum ? (
-          <Link href="../result" className="p-2 font-bold rounded-full shadow-lg min-w-40">see result</Link>
+          <button onClick={gotoResultPage} className="p-2 font-bold rounded-full shadow-lg min-w-40">see result</button>
         ) : (
           <button type="button" onClick={handleNextButton} className="p-2 font-bold rounded-full shadow-lg min-w-40">NEXT</button>
         )}
