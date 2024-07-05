@@ -13,7 +13,7 @@ const Home = () => {
     setSeeAnswer(e.target.value);
   }
   return (
-    <div className="flex flex-col gap-8 justify-center items-center">
+    <div className="absolute w-full top-2/4 -translate-y-1/2 flex flex-col gap-8 justify-center items-center bg-white/75 p-3 backdrop-blur">
       <h1 className="text-center font-bold text-2xl">Practice TOEIC No.5</h1>
       <FetchData />
       <fieldset className="flex gap-4 flex-wrap">
@@ -27,7 +27,7 @@ const Home = () => {
         </div>
       </fieldset>
       {showLink && 
-      <Link href={`/question?seeAnswer=${seeAnswer}`} className="flex justify-center p-2 font-bold rounded-full shadow-lg hover:shadow-none min-w-40">START</Link>
+      <Link href={`/question?seeAnswer=${seeAnswer}`} className="flex justify-center p-2 font-bold rounded-full shadow-lg hover:shadow-none min-w-40 bg-white/75">START</Link>
       }
     </div>
   );

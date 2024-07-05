@@ -53,23 +53,23 @@ const Question = () => {
 
   return (
     <div className="flex flex-col gap-8 items-center">
-      <p>Q{currentNum + 1}. {data[currentNum].question}</p>
-      <fieldset>
-        <div className="flex gap-4">
+      <p className="text-lg lg:text-3xl bg-white/75 p-3 backdrop-blur">Q{currentNum + 1}. {data[currentNum].question}</p>
+      <fieldset className="flex flex-col gap-4">
+        <div className="flex gap-4 text-3xl bg-white/75 p-3 rounded-lg backdrop-blur">
           <input type="radio" id={data[currentNum].choices[0]} name="drone" value={data[currentNum].choices[0]} onChange={handleSelect} />
-          <label for={data[currentNum].choices[0]}>A. {data[currentNum].choices[0]}</label>
+          <label className="w-full" for={data[currentNum].choices[0]}>A. {data[currentNum].choices[0]}</label>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 text-3xl bg-white/75 p-3 rounded-lg backdrop-blur">
           <input type="radio" id={data[currentNum].choices[1]} name="drone" value={data[currentNum].choices[1]} onChange={handleSelect} />
-          <label for={data[currentNum].choices[1]}>B. {data[currentNum].choices[1]}</label>
+          <label className="w-full" for={data[currentNum].choices[1]}>B. {data[currentNum].choices[1]}</label>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 text-3xl bg-white/75 p-3 rounded-lg backdrop-blur">
           <input type="radio" id={data[currentNum].choices[2]} name="drone" value={data[currentNum].choices[2]} onChange={handleSelect} />
-          <label for={data[currentNum].choices[2]}>C. {data[currentNum].choices[2]}</label>
+          <label className="w-full" for={data[currentNum].choices[2]}>C. {data[currentNum].choices[2]}</label>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 text-3xl bg-white/75 p-3 rounded-lg backdrop-blur">
           <input type="radio" id={data[currentNum].choices[3]} name="drone" value={data[currentNum].choices[3]} onChange={handleSelect} />
-          <label for={data[currentNum].choices[3]}>D. {data[currentNum].choices[3]}</label>
+          <label className="w-full" for={data[currentNum].choices[3]}>D. {data[currentNum].choices[3]}</label>
         </div>
       </fieldset>
       {seeAnswer === 'each' && judgment && (
@@ -83,11 +83,11 @@ const Question = () => {
         )
       )}
       <div className="flex gap-8">
-        <button type="button" onClick={handlePrevButton} className="p-2 font-bold rounded-full shadow-lg min-w-40">PREV</button>
+        <button type="button" onClick={handlePrevButton} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur">PREV</button>
         {data.length - 1 === currentNum ? (
-          <button onClick={gotoResultPage} className="p-2 font-bold rounded-full shadow-lg min-w-40">see result</button>
+          <button onClick={gotoResultPage} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur">see result</button>
         ) : (
-          <button type="button" onClick={handleNextButton} className="p-2 font-bold rounded-full shadow-lg min-w-40">NEXT</button>
+          <button type="button" onClick={handleNextButton} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur">NEXT</button>
         )}
       </div>
     </div >

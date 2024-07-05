@@ -9,7 +9,6 @@ function FetchData() {
             .then(datas =>
                 setDatas(datas.values))
     }, [])
-    // console.log(datas);
     return (
         <div>
         </div>
