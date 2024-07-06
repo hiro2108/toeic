@@ -1,13 +1,13 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Practice TOEIC No.5",
-  description: "This site allows you to solve TOEIC No.5 practice questions",
+  title: "TOEIC No.5 練習問題",
+  description: "TOEIC No.5の練習問題が解けるWebアプリです。",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body>{children}</body>
     </html>
   );

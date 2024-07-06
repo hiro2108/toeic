@@ -1,7 +1,7 @@
 'use client'
 import data from "../datas/datas";
 import { useSearchParams } from "next/navigation";
-
+import Link from "next/link";
 
 const Result = () => {
   const params = useSearchParams();
@@ -18,7 +18,7 @@ const Result = () => {
     const userAnswer = answers[questionIndex];
     const correctAnswer = question.answer;
     return (
-      <div key={questionIndex} className="result-item flex flex-col gap-1 lg:gap-4 bg-white/75 p-3 rounded-lg backdrop-blur">
+      <div key={questionIndex} className="result-item flex flex-col gap-1 lg:gap-4 bg-white/75 p-3 rounded-lg backdrop-blur max-w-screen-lg m-auto">
         <h2 className="text-2xl font-bold">Q{questionIndex + 1}. {userAnswer === correctAnswer ? (
           <span>〇</span>
         ) : (
@@ -41,9 +41,10 @@ const Result = () => {
   };
 
   return (
-    <div className="result pt-4 pb-4">
-      <h1 className="text-3xl mb-8 font-bold text-center	">Result</h1>
+    <div className="result pt-4 pb-4 flex flex-col gap-6">
+      <h1 className="text-3xl font-bold text-center	">Result</h1>
       <div className="flex flex-col gap-4">{data.map((answer, index) => renderResultItem(index))}</div>
+      <Link href="/" className="p-4 bg-white/75 rounded-full text-xl backdrop-blur m-auto max-w-60">最初の画面に戻る</Link>
     </div>
   )
 }
