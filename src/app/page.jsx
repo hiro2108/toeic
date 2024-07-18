@@ -1,9 +1,7 @@
 'use client'
-import Image from "next/image";
 import Link from "next/link";
 import { createContext, useState } from "react";
-import FetchData from "./FetchData";
-const Mycontext=createContext({seeAnswer:null});
+// const Mycontext=createContext({seeAnswer:null});
 const Home = () => {
   const [showLink, setShowLink] = useState(false);
   const [seeAnswer,setSeeAnswer]=useState(null);

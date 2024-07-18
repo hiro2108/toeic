@@ -1,10 +1,10 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import fetchQuestions from "../datas/api";
 
-const Result = () => {
+const ResultContent = () => {
   const params = useSearchParams();
   const answers = [];
 
@@ -60,4 +60,12 @@ const Result = () => {
   )
 }
 
-export default Result
+const Result = () => {
+  return (
+    <Suspense>
+      <ResultContent />
+    </Suspense>
+  );
+};
+
+export default Result;

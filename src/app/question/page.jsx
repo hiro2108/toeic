@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import fetchQuestions from "../datas/api";
 
-const Question = () => {
+const QuestionContent = () => {
   //クエリパラメータの値を取得する
   const router = useRouter();
   const params = useSearchParams();
@@ -15,7 +15,6 @@ const Question = () => {
   const [displayExplanation, setDisplayExplanation] = useState(false); //結果を表示する
   const [judgment, setJudgment] = useState(false); //正誤判定
   const [addAnswers, setAddAnswers] = useState([]); //回答を追加
-  const [error, setError] = useState(null); //エラーを出力
   const [loading, setLoading] = useState(true); //ローディング画面
 
   // スプレッドシートから取得したデータ
@@ -76,46 +75,54 @@ const Question = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 items-center">
+      <div className="flex flex-col gap-8 items-center">
 
-      {/* 問題文 */}
-      <p className="text-lg lg:text-3xl bg-white/75 lg:mt-12 p-3 backdrop-blur">
-        Q{currentNum + 1}. /{questionsData.length}<br />
-        {loading ? "問題を読み込み中..." : questionsData[currentNum]?.question}
-      </p>
+        {/* 問題文 */}
+        <p className="text-lg lg:text-3xl bg-white/75 lg:mt-12 p-3 backdrop-blur">
+          Q{currentNum + 1}. /{questionsData.length}<br />
+          {loading ? "問題を読み込み中..." : questionsData[currentNum]?.question}
+        </p>
 
-      {/* 選択肢 */}
-      <fieldset className="flex flex-col gap-4">
-        {loading ? "問題を読み込み中..." : questionsData[currentNum]?.choices.map((choice, index) => (
-          <div key={index} className={`flex gap-4 text-2xl lg:text-3xl bg-white/75 p-3 rounded-lg backdrop-blur cursor-pointer hover:brightness-125 ${selectedValue === choice[0] ? '!bg-white' : '' // 選択された要素を白くする
-            }`}>
-            <input type="radio" id={choice[0]} name="drone" value={choice[0]} onChange={handleSelect} className="cursor-pointer" />
-            <label className="w-full cursor-pointer" for={choice[0]}>{choice[0]}</label>
-          </div>
-        ))}
-      </fieldset>
+        {/* 選択肢 */}
+        <fieldset className="flex flex-col gap-4">
+          {loading ? "問題を読み込み中..." : questionsData[currentNum]?.choices.map((choice, index) => (
+            <div key={index} className={`flex gap-4 text-2xl lg:text-3xl bg-white/75 p-3 rounded-lg backdrop-blur cursor-pointer hover:brightness-125 ${selectedValue === choice[0] ? '!bg-white' : '' // 選択された要素を白くする
+              }`}>
+              <input type="radio" id={choice[0]} name="drone" value={choice[0]} onChange={handleSelect} className="cursor-pointer" />
+              <label className="w-full cursor-pointer" for={choice[0]}>{choice[0]}</label>
+            </div>
+          ))}
+        </fieldset>
 
-      {seeAnswer === 'each' && judgment && (
-        <button type="button" onClick={handleDisplayExplanation} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">正誤を確認する</button>
-      )}
-      {displayExplanation && (
-        selectedValue === questionsData[currentNum].answer[0] ? (
-          <div className="w-full bg-white/75 backdrop-blur p-3 text-center text-lg lg:text-3xl font-bold">〇　正解！！</div>
-        ) : (
-          <div className="w-full bg-white/75 backdrop-blur p-3 text-center text-lg lg:text-3xl font-bold">✕<br /><span className="font-normal text-base lg:text-3xl">正解は、{questionsData[currentNum].answer}</span></div>
-        )
-      )}
-      <div className="flex gap-8">
-        {currentNum !== 0 ? (<button type="button" onClick={handlePrevButton} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">前の問題へ</button>) : ""}
-
-        {loading ? "問題を読み込み中..." : questionsData.length - 1 === currentNum ? (
-          <button onClick={gotoResultPage} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">結果を見る</button>
-        ) : (
-          <button type="button" onClick={handleNextButton} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">次の問題へ</button>
+        {seeAnswer === 'each' && judgment && (
+          <button type="button" onClick={handleDisplayExplanation} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">正誤を確認する</button>
         )}
-      </div>
-    </div >
+        {displayExplanation && (
+          selectedValue === questionsData[currentNum].answer[0] ? (
+            <div className="w-full bg-white/75 backdrop-blur p-3 text-center text-lg lg:text-3xl font-bold">〇　正解！！</div>
+          ) : (
+            <div className="w-full bg-white/75 backdrop-blur p-3 text-center text-lg lg:text-3xl font-bold">✕<br /><span className="font-normal text-base lg:text-3xl">正解は、{questionsData[currentNum].answer}</span></div>
+          )
+        )}
+        <div className="flex gap-8">
+          {currentNum !== 0 ? (<button type="button" onClick={handlePrevButton} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">前の問題へ</button>) : ""}
+
+          {loading ? "問題を読み込み中..." : questionsData.length - 1 === currentNum ? (
+            <button onClick={gotoResultPage} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">結果を見る</button>
+          ) : (
+            <button type="button" onClick={handleNextButton} className="p-2 font-bold rounded-full shadow-lg min-w-40 bg-white/75 backdrop-blur lg:text-xl hover:brightness-125">次の問題へ</button>
+          )}
+        </div>
+      </div >
   )
 }
+
+const Question = () => {
+  return (
+    <Suspense>
+      <QuestionContent />
+    </Suspense>
+  );
+};
 
 export default Question;
