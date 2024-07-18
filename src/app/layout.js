@@ -4,7 +4,7 @@ export const metadata = {
   title: "TOEIC No.5 練習問題",
   description: "TOEIC No.5の練習問題が解けるWebアプリです。",
   openGraph: {
-    images: './og-image.jpg',
+    images: 'https://toeic-five.vercel.app/og-image.jpg',
   },
 };
 
