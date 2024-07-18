@@ -2,38 +2,44 @@
 import { useState, useEffect } from "react"
 
 function FetchData() {
-    const [datas, setDatas] = useState([])
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
-        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${process.env.NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/toeic?key=${process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`)
-            .then(res => res.json())
-            .then(datas =>
-                setDatas(datas.values))
-    }, [])
-    const key=datas[0]
-    if (key) {
-        const question = key[0];
-        const answer=key[5];
-        const choices=key[1];
-    
-      } else {
-        console.error('key is undefined');
-      }
-   
-    const result=[]
-    for(let n=1; n<datas.length;n++){
-      const questionObject={
-            question:datas[n][0],
-            choices:[[datas[n][1]],[datas[n][2]],[datas[n][3]],[datas[n][4]]],
-            answer:[datas[n][5]]
+        // 非同期処理
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            // APIを使ってGoogleスプレッドシートを取得
+            try {
+                const response = await fetch(
+                    `https://sheets.googleapis.com/v4/spreadsheets/${process.env.NEXT_PUBLIC_GOOGLE_SHEETS_DOC_ID}/values/toeic?key=${process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY}`
+                );
+                const data = await response.json();
+                setData(data.values);
+            }
+            // もし取得できなければerrorを返す
+            catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
         };
-        result.push(questionObject);
+        fetchData();
+    }, []);
+    if (data.length > 0) {
+        const result = [];
+        // スプレッドシートの行数分だけ問題を連想配列に格納
+        for (let n = 1; n < data.length; n++) {
+            result.push({
+                question: data[n][0],
+                choices: [[data[n][1]], [data[n][2]], [data[n][3]], [data[n][4]]],
+                answer: [data[n][5]]
+            });
+        }
+        return result;
     }
-    console.log(result);
-    return (
-        <span>
-            {datas.length - 1}
-        </span>
-    );
 }
 
 export default FetchData

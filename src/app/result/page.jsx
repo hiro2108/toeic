@@ -1,7 +1,8 @@
 'use client'
-import data from "../datas/datas";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import fetchQuestions from "../datas/api";
 
 const Result = () => {
   const params = useSearchParams();
@@ -13,8 +14,18 @@ const Result = () => {
     answers[questionNumber - 1] = value;
   }
 
+  // スプレッドシートから取得したデータ
+  const [questionsData, setQuestionsData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const questions = await fetchQuestions();
+      setQuestionsData(questions);
+    }
+    fetchData();
+  }, []);
+
   const renderResultItem = (questionIndex) => {
-    const question = data[questionIndex];
+    const question = questionsData[questionIndex];
     const userAnswer = answers[questionIndex];
     const correctAnswer = question.answer;
     return (
@@ -34,8 +45,8 @@ const Result = () => {
             <li className="text-lg lg:text-3xl">{question.choices[3]}</li>
           </ul>
         </div>
-        <p className="text-lg lg:text-3xl">Your answer: {userAnswer}</p>
-        <p className="text-lg lg:text-3xl">A. {correctAnswer}</p>
+        <p className="text-lg lg:text-3xl">あなたの回答: {userAnswer}</p>
+        <p className="text-lg lg:text-3xl">正解. {correctAnswer}</p>
       </div>
     );
   };
@@ -43,7 +54,7 @@ const Result = () => {
   return (
     <div className="result pt-4 pb-4 flex flex-col gap-6">
       <h1 className="text-3xl font-bold text-center	">Result</h1>
-      <div className="flex flex-col gap-4">{data.map((answer, index) => renderResultItem(index))}</div>
+      <div className="flex flex-col gap-4">{questionsData.map((answer, index) => renderResultItem(index))}</div>
       <Link href="/" className="p-4 bg-white/75 rounded-full text-xl backdrop-blur m-auto max-w-60">最初の画面に戻る</Link>
     </div>
   )
