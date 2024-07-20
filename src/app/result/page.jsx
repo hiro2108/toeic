@@ -37,7 +37,7 @@ const ResultContent = () => {
         )}</h2>
         <p className="text-lg lg:text-3xl">Q. {question.question}</p>
         <div className="flex gap-1">
-          <p className="text-lg lg:text-3xl">Choices:</p>
+          <p className="text-lg lg:text-3xl">選択肢:</p>
           <ul className="flex flex-wrap gap-1">
             <li className="text-lg lg:text-3xl">{question.choices[0]}, </li>
             <li className="text-lg lg:text-3xl">{question.choices[1]}, </li>
@@ -53,7 +53,7 @@ const ResultContent = () => {
 
   return (
     <div className="result pt-4 pb-4 flex flex-col gap-6">
-      <h1 className="text-3xl font-bold text-center	">Result</h1>
+      <h1 className="text-3xl font-bold text-center	">結果発表</h1>
       <div className="flex flex-col gap-4">{questionsData.map((answer, index) => renderResultItem(index))}</div>
       <Link href="/" className="p-4 bg-white/75 rounded-full text-xl backdrop-blur m-auto max-w-60">最初の画面に戻る</Link>
     </div>
